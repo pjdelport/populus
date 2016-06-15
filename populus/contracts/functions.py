@@ -69,7 +69,7 @@ class Function(ContractBound):
         return txn_hash, txn_receipt
 
     def sendTransaction(self, *args, **kwargs):
-        data = self.get_call_data(args)
+        data = '0x' + self.get_call_data(args)
 
         if 'gas' not in kwargs:
             # The gasLimit value on the geth chain seems to continuously
@@ -90,7 +90,7 @@ class Function(ContractBound):
 
     def call(self, *args, **kwargs):
         raw = kwargs.pop('raw', False)
-        data = self.get_call_data(args)
+        data = '0x' + self.get_call_data(args)
 
         output = self.contract._meta.blockchain_client.call(
             to=self.contract._meta.address,
