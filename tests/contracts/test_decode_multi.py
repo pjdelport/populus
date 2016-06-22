@@ -30,3 +30,14 @@ def test_decode_various():
                 b'stupid pink animal\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00', 0]
     output = decode_multi(['address', 'uint32', 'bytes32', 'int32'], data)
     assert output == expected
+
+
+def test_decode_empty():
+    assert decode_multi([], '0x') == []
+
+
+def test_decode_empty_zero():
+    """
+    As a special case, also accept '0x0' as a lenient synonym for '0x'.
+    """
+    assert decode_multi([], '0x0') == []

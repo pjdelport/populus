@@ -44,6 +44,11 @@ def decode_single(typ, data):
 
 
 def decode_multi(types, outputs):
+    # XXX: Be lenient and treat '0x0' as '0x', to accommodate sources that
+    # represent the empty byte data value using the quantity convention.
+    if outputs == '0x0':
+        outputs = '0x'
+
     res = abi.decode_abi(
         types,
         binascii.a2b_hex(strip_0x_prefix(outputs)),
