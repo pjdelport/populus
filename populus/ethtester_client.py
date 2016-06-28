@@ -146,6 +146,10 @@ class EthTesterClient(object):
             id, args, kwargs = self.request_queue.get()
             mine = kwargs.pop('_mine', False)
             try:
+                # XXX(pjdelport): Mine before the transaction as well,
+                # to avoid spurious BlockGasLimitReached exceptions?
+                if mine:
+                    self.evm.mine()
                 self._send_transaction(*args, **kwargs)
                 if mine:
                     self.evm.mine()
