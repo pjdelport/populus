@@ -297,12 +297,14 @@ class EthTesterClient(object):
             raise ValueError("Using call on any block other than latest is unsupported")
         if kwargs.get('block', 'latest') != "latest":
             raise ValueError("Using call on any block other than latest is unsupported")
-        snapshot = self.evm.snapshot()
-        r = self._send_transaction(*args, **kwargs)
-        self.evm.revert(snapshot)
+
         # Stop-gap solution for bug with a transaction that immediately follows
         # a call.
         self.evm.mine()
+
+        snapshot = self.evm.snapshot()
+        r = self._send_transaction(*args, **kwargs)
+        self.evm.revert(snapshot)
         return encode_hex(r)
 
     def get_transaction_by_hash(self, txn_hash):
