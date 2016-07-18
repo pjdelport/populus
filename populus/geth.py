@@ -159,6 +159,14 @@ def geth_wrapper(data_dir, popen_class=subprocess.Popen, cmd="geth",
         if not os.path.exists(genesis_block):
             genesis_block = os.path.join(POPULUS_DIR, 'genesis-test.json')
 
+        # Initialise the chain in data_dir with the custom genesis_block.
+        subprocess.check_call([
+            cmd,
+            '--datadir', data_dir,
+            'init',
+            genesis_block
+        ])
+
     if port is None:
         port = utils.get_open_port()
 
@@ -166,7 +174,6 @@ def geth_wrapper(data_dir, popen_class=subprocess.Popen, cmd="geth",
         ipcpath = tempfile.NamedTemporaryFile().name
 
     command.extend((
-        '--genesis', genesis_block,
         '--datadir', data_dir,
         '--maxpeers', max_peers,
         '--networkid', network_id,
